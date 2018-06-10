@@ -182,6 +182,11 @@ bool Environment::dribble_off()
 {
     return EnvDribbleOff(m_cobj);
 }
+
+long int Environment::mem_used()
+{
+    return EnvMemUsed(m_cobj);
+}
 /* <-- debug }}}*/
 
 /*{{{ run --> */
@@ -224,67 +229,6 @@ void Environment::reorder_agenda(Module::pointer module)
         EnvReorderAgenda(m_cobj, module->cobj());
 }
 /* <-- run }}}*/
-
-/*{{{ facts --> */
-Fact::pointer Environment::get_facts()
-{
-    void *fact = EnvGetNextFact(m_cobj, 0);
-    if (fact)
-        return Fact::create(*this, fact);
-    return Fact::pointer();
-}
-
-Fact::pointer Environment::assert_fact(const std::string &factString)
-{
-    void* fact = EnvAssertString(m_cobj, factString.c_str());
-    if (fact)
-        return Fact::create(*this, fact);
-    return Fact::pointer();
-}
-
-DefaultFacts::pointer Environment::get_default_facts(const std::string &default_facts_name)
-{
-    void* deffacts = EnvFindDeffacts(m_cobj, default_facts_name.c_str());
-    if (deffacts)
-        return DefaultFacts::create(*this, deffacts);
-    return DefaultFacts::pointer();
-}
-
-std::vector< std::string > Environment::get_default_facts_names()
-{
-    DATA_OBJECT clipsdo;
-    EnvGetDeffactsList(m_cobj, &clipsdo, 0);
-    return data_object_to_strings(&clipsdo);
-}
-
-std::vector<std::string> Environment::get_default_facts_names(const Module &module)
-{
-    DATA_OBJECT clipsdo;
-    if (module.cobj()) {
-        EnvGetDeffactsList(m_cobj, &clipsdo, module.cobj());
-        return data_object_to_strings(&clipsdo);
-    }
-    return std::vector<std::string>();
-}
-
-std::vector<std::string> Environment::get_default_facts_names(Module::pointer module)
-{
-    DATA_OBJECT clipsdo;
-    if (module && module->cobj()) {
-        EnvGetDeffactsList(m_cobj, &clipsdo, module->cobj());
-        return data_object_to_strings(&clipsdo);
-    }
-    return std::vector<std::string>();
-}
-
-DefaultFacts::pointer Environment::get_default_facts_list_head()
-{
-    void *df = EnvGetNextDeffacts(m_cobj, 0);
-    if (df)
-        return DefaultFacts::create(*this, df);
-    return DefaultFacts::pointer();
-}
-/* <-- defaultfacts }}}*/
 
 /*{{{ module --> */
 Module::pointer Environment::get_module(const std::string &module_name)
@@ -470,6 +414,152 @@ std::vector<std::string> Environment::get_template_names(Module::pointer module)
     return std::vector<std::string>();
 }
 /* <-- template }}}*/
+
+/*{{{ facts --> */
+Fact::pointer Environment::get_facts()
+{
+    void *fact = EnvGetNextFact(m_cobj, 0);
+    if (fact)
+        return Fact::create(*this, fact);
+    return Fact::pointer();
+}
+
+Fact::pointer Environment::assert_fact(const std::string &factString)
+{
+    void *fact = EnvAssertString(m_cobj, factString.c_str());
+    if (fact)
+        return Fact::create(*this, fact);
+    return Fact::pointer();
+}
+
+DefaultFacts::pointer Environment::get_default_facts(const std::string &default_facts_name)
+{
+    void *deffacts = EnvFindDeffacts(m_cobj, default_facts_name.c_str());
+    if (deffacts)
+        return DefaultFacts::create(*this, deffacts);
+    return DefaultFacts::pointer();
+}
+
+std::vector< std::string > Environment::get_default_facts_names()
+{
+    DATA_OBJECT clipsdo;
+    EnvGetDeffactsList(m_cobj, &clipsdo, 0);
+    return data_object_to_strings(&clipsdo);
+}
+
+std::vector<std::string> Environment::get_default_facts_names(const Module &module)
+{
+    DATA_OBJECT clipsdo;
+    if (module.cobj()) {
+        EnvGetDeffactsList(m_cobj, &clipsdo, module.cobj());
+        return data_object_to_strings(&clipsdo);
+    }
+    return std::vector<std::string>();
+}
+
+std::vector<std::string> Environment::get_default_facts_names(Module::pointer module)
+{
+    DATA_OBJECT clipsdo;
+    if (module && module->cobj()) {
+        EnvGetDeffactsList(m_cobj, &clipsdo, module->cobj());
+        return data_object_to_strings(&clipsdo);
+    }
+    return std::vector<std::string>();
+}
+
+DefaultFacts::pointer Environment::get_default_facts_list_head()
+{
+    void *df = EnvGetNextDeffacts(m_cobj, 0);
+    if (df)
+        return DefaultFacts::create(*this, df);
+    return DefaultFacts::pointer();
+}
+/* <-- defaultfacts }}}*/
+
+/*{{{ class --> */
+Class::pointer Environment::get_class(const std::string &class_name)
+{
+    if (m_cobj) {
+        void *cls = EnvFindDefclass(m_cobj, class_name.c_str());
+        if (cls)
+            return Class::create(*this, cls);
+    }
+    return Class::pointer();
+}
+
+Class::pointer Environment::get_class_list_head()
+{
+    void *cls = EnvGetNextDefclass(m_cobj, 0);
+    if (cls)
+        return Class::create(*this, cls);
+    return Class::pointer();
+}
+
+std::vector<std::string> Environment::get_class_names()
+{
+    DATA_OBJECT clipsdo;
+    EnvGetDefclassList(m_cobj, &clipsdo, 0);
+    return data_object_to_strings(&clipsdo);
+}
+
+std::vector<std::string> Environment::get_class_names(const Module &module)
+{
+    DATA_OBJECT clipsdo;
+    if (module.cobj()) {
+        EnvGetDefclassList(m_cobj, &clipsdo, (struct defmodule *)module.cobj());
+        return data_object_to_strings(&clipsdo);
+    }
+    return std::vector<std::string>();
+}
+
+std::vector<std::string> Environment::get_class_names(Module::pointer module)
+{
+    DATA_OBJECT clipsdo;
+    if (module && module->cobj()) {
+        EnvGetDefclassList(m_cobj, &clipsdo, (struct defmodule *)module->cobj());
+        return data_object_to_strings(&clipsdo);
+    }
+    return std::vector<std::string>();
+}
+/* <-- class }}}*/
+
+/*{{{ instance --> */
+long Environment::save_instances(const std::string &filename, int saveCode)
+{
+    return EnvSaveInstances(m_cobj, filename.c_str(), saveCode);
+}
+
+long Environment::binary_save_instances(const std::string &filename, int saveCode)
+{
+    return EnvBinarySaveInstances(m_cobj, filename.c_str(), saveCode);
+}
+
+long Environment::load_instances(const std::string &filename)
+{
+    return EnvLoadInstances(m_cobj, filename.c_str());
+}
+
+long Environment::binary_load_instances(const std::string &filename)
+{
+    return EnvBinaryLoadInstances(m_cobj, filename.c_str());
+}
+
+Instance::pointer Environment::new_instance(const std::string &makeString)
+{
+    void *instance = EnvMakeInstance(m_cobj, makeString.c_str());
+    if (instance)
+        return Instance::create(*this, instance);
+    return Instance::pointer();
+}
+
+Instance::pointer Environment::get_instance_list_head()
+{
+    void *instance = EnvGetNextInstance(m_cobj, 0);
+    if (instance)
+        return Instance::create(*this, instance);
+    return Instance::pointer();
+}
+/* <-- instance }}}*/
 
 /*{{{ rule --> */
 Rule::pointer Environment::get_rule(const std::string &rule_name)

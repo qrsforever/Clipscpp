@@ -75,18 +75,18 @@ static int s_log_router_print(void *env, const char *logicalName, const char *st
     g_buffer += "\n";
     if (strcmp(logicalName, LOG_INFO_NAME) == 0
         || strcmp(logicalName, WDISPLAY) == 0) {
-        LOGI("Clips: %s", g_buffer.c_str());
+        LOGI("CLIPS: \n%s\n", g_buffer.c_str());
     } else if (strcmp(logicalName, LOG_DEBUG_NAME) == 0
         || strcmp(logicalName, STDOUT) == 0) {
-        LOGD("Clips: %s", g_buffer.c_str());
+        LOGD("CLIPS: \n%s\n", g_buffer.c_str());
     } else if (strcmp(logicalName, LOG_WARN_NAME) == 0
         || strcmp(logicalName, WWARNING) == 0) {
-        LOGW("Clips: %s", g_buffer.c_str());
+        LOGW("CLIPS: \n%s\n", g_buffer.c_str());
     } else if (strcmp(logicalName, LOG_ERROR_NAME) == 0
         || strcmp(logicalName, WERROR) == 0) {
-        LOGE("Clips: %s", g_buffer.c_str());
+        LOGE("CLIPS: \n%s\n", g_buffer.c_str());
     } else if (strcmp(logicalName, WTRACE) == 0) {
-        LOGT("Clips: %s", g_buffer.c_str());
+        LOGT("CLIPS: \n%s\n", g_buffer.c_str());
     }
     g_buffer.clear();
     return TRUE;

@@ -24,7 +24,7 @@ class Fact: public ClipsObject {
 public:
     typedef std::shared_ptr<Fact> pointer;
 
-    Fact(Environment &environment, void *obj=0);
+    Fact(Environment &environment, void *cobj=0);
 
     static Fact::pointer create(Environment &environment, void *cobj=0);
     static Fact::pointer create(Environment &environment, Template::pointer temp);

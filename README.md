@@ -10,11 +10,11 @@ categories: [ Local ]
 下载依赖
 ========
 
-官网下载: 
+官网下载:
     [630](https://sourceforge.net/projects/clipsrules/files/CLIPS/6.30/)
     [640](https://netix.dl.sourceforge.net/project/clipsrules/CLIPS/6.40_Beta_2/clips_core_source_640.zip)
 
-百度云盘: 
+百度云盘:
     [630](https://pan.baidu.com/s/1hzLVwX_clG50FjaJ0t7hdg)
     [640](https://pan.baidu.com/s/1calD7UUv94IVyq4mcuXPLA)
 
@@ -52,3 +52,25 @@ TODO
 ====
 
 640和630版本变化太大, 本代码使用630编译
+
+
+Restriction
+===========
+
+1. add user function only support most 4 parameters, If more then 4 parameters, need append template of `add_function` in Enviroment.h
+
+2. support return type and argument type
+
+>
+TYPE | Return | Argument
+:----:|:--:|:--:
+void\* | Y | Y
+bool | Y | N
+char | Y | N
+double | Y | Y
+float | Y  | Y
+int | Y | Y
+long | Y | Y
+string | Y | Y
+void | Y | Y
+Multi | Y | Y
