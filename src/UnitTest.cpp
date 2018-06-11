@@ -314,6 +314,47 @@ void test_rule(Environment *env)
     }
 }/*}}}*/
 
+void test_class(Environment *env)
+{/*{{{*/
+    Class::pointer cls = env->get_class_list_head();
+    for (; cls != 0; cls = cls->next()) {
+        LOGD("format: \n%s\n", cls->formatted().c_str());
+        LOGD("class name[%s], module name[%s], is watched[%d]\n",
+            cls->name().c_str(),
+            cls->module_name().c_str(),
+            cls->is_watched());
+        std::vector<std::string> names = cls->slot_names();
+        for (uint32_t i = 0; i < names.size(); ++i) {
+            LOGD("  slot[%s]\n", names[i].c_str());
+            Values defaultValues = cls->slot_default_value(names[i]);
+            LOGD("\tdefaultValues:\n");
+            SHOW_VALUES(defaultValues, "\t\t");
+            Values allowedValues = cls->slot_allowed_values(names[i]);
+            LOGD("\tallowedValues:\n");
+            SHOW_VALUES(allowedValues, "\t\t");
+            Values slotTypes = cls->slot_types(names[i]);
+            LOGD("\tslotTypes:\n");
+            SHOW_VALUES(slotTypes, "\t\t");
+            Values slotRange = cls->slot_range(names[i]);
+            LOGD("\tslotRange:\n");
+            SHOW_VALUES(slotRange, "\t\t");
+            Values slotSources = cls->slot_sources(names[i]);
+            SHOW_VALUES(slotSources, "\t\t");
+        }
+    }
+    cls = env->get_class("DUCK");
+    if (!cls)
+        LOGD("Duck module is TEST, so run here!\n");
+
+    Module::pointer mod = env->get_module("TEST");
+    if (mod) {
+        std::vector<std::string> names = env->get_class_names(mod);
+        for (uint32_t j = 0; j < names.size(); ++j)
+            LOGD("names[%d] = %s\n", j, names[j].c_str());
+    }
+
+}/*}}}*/
+
 int main(int argc, char *argv[])
 {/*{{{*/
     int ret = -1;
@@ -372,6 +413,11 @@ int main(int argc, char *argv[])
      * 测试Rule
      */
     test_rule(env);
+
+    /*
+     * 测试Class
+     */
+    test_class(env);
 
     return 0;
 }/*}}}*/
