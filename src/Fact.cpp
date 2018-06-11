@@ -30,9 +30,9 @@ Fact::Fact(Environment &environment, void *cobj)
         EnvIncrementFactCount(m_environment.cobj(), m_cobj);
 }
 
-Fact::pointer Fact::create(Environment &environment, void *obj)
+Fact::pointer Fact::create(Environment &environment, void *cobj)
 {
-    return Fact::pointer(new Fact(environment, obj));
+    return Fact::pointer(new Fact(environment, cobj));
 }
 
 Fact::pointer Fact::create(Environment &environment, Template::pointer temp)
@@ -83,30 +83,30 @@ long int Fact::index() const
 
 std::vector<std::string> Fact::slot_names()
 {
-    DATA_OBJECT clipsdo;
+    DATA_OBJECT outdata;
 
     if (!m_cobj)
         return std::vector<std::string>();
 
-    EnvFactSlotNames(m_environment.cobj(), m_cobj, &clipsdo);
+    EnvFactSlotNames(m_environment.cobj(), m_cobj, &outdata);
 
-    return data_object_to_strings(&clipsdo);
+    return data_object_to_strings(&outdata);
 }
 
 Values Fact::slot_value(const std::string &name)
 {
-    DATA_OBJECT clipsdo;
+    DATA_OBJECT outdata;
     int result;
 
     if (!m_cobj)
         return Values();
 
     if (name == "")
-        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, NULL, &clipsdo);
+        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, NULL, &outdata);
     else
-        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, const_cast<char*>(name.c_str()), &clipsdo);
+        result = EnvGetFactSlot(m_environment.cobj(), m_cobj, name.c_str(), &outdata);
     if (result)
-        return data_object_to_values(&clipsdo);
+        return data_object_to_values(&outdata);
     else
         return Values();
 }
@@ -144,7 +144,7 @@ bool Fact::set_slot(const std::string &slot_name, const Value &value)
     }
     bool rv = EnvPutFactSlot(m_environment.cobj(),
         m_cobj,
-        const_cast<char*>(slot_name.c_str()),
+        slot_name.c_str(),
         clipsdo);
     delete clipsdo;
     return rv;
@@ -159,7 +159,7 @@ bool Fact::set_slot(const std::string &slot_name, const Values &values)
     }
     bool rv = EnvPutFactSlot(m_environment.cobj(),
         m_cobj,
-        const_cast<char*>(slot_name.c_str()),
+        slot_name.c_str(),
         clipsdo);
     delete clipsdo;
     return rv;
@@ -182,5 +182,12 @@ unsigned int Fact::refcount() const
     struct fact *f = (struct fact *)m_cobj;
     return f->factHeader.busyCount;
 }
+
+#ifdef DEBUG_OBJECT
+void Instance::debug()
+{
+
+}
+#endif
 
 } /* namespace CLIPS */

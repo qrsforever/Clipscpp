@@ -40,6 +40,10 @@ public:
 #endif
     }
 
+#ifdef DEBUG_OBJECT
+    virtual void debug() { }
+#endif
+
     void* cobj() const { return m_cobj; }
 
 protected:

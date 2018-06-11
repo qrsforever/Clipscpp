@@ -129,9 +129,8 @@ bool Template::slot_exists(const std::string &slot_name)
     if (m_cobj)
         return EnvDeftemplateSlotExistP(m_environment.cobj(),
             m_cobj,
-            const_cast<char*>(slot_name.c_str()));
-    else
-        return false;
+            slot_name.c_str());
+    return false;
 }
 
 bool Template::is_multifield_slot(const std::string &slot_name)

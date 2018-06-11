@@ -12,11 +12,13 @@
 #include "ClipsObject.h"
 #include "Utility.h"
 #include "Fact.h"
+#include "Instance.h"
 #include "DefaultFacts.h"
 #include "Global.h"
 #include "Module.h"
 #include "Rule.h"
 #include "Function.h"
+#include "Class.h"
 #include "Any.h"
 
 #include <map>
@@ -28,6 +30,10 @@
 
 extern "C"
 int EnvDefineFunction2WithContext(void *, const char *, int, int (*) (void *), const char *, const char *, void *);
+
+#define GLOBAL_SAVE   0  
+#define LOCAL_SAVE    1
+#define VISIBLE_SAVE  2
 
 namespace CLIPS {
 
@@ -83,6 +89,7 @@ public:
     bool is_dribble_active();
     bool dribble_on(const std::string &filename);
     bool dribble_off();
+    long int mem_used();
 /* <-- debug }}}*/
 
 /*{{{ run */
@@ -96,17 +103,6 @@ public:
     void reorder_agenda(const Module &module);
     void reorder_agenda(Module::pointer module);
 /*}}}*/
-
-/*{{{ facts --> */
-    Fact::pointer get_facts();
-    Fact::pointer assert_fact(const std::string &factString);
-
-    DefaultFacts::pointer get_default_facts(const std::string &default_facts_name);
-    std::vector< std::string > get_default_facts_names();
-    std::vector<std::string> get_default_facts_names(const Module &module);
-    std::vector<std::string> get_default_facts_names(Module::pointer module);
-    DefaultFacts::pointer get_default_facts_list_head();
-/* <-- facts }}}*/
 
 /*{{{ module --> */
     Module::pointer get_module(const std::string &module_name);
@@ -137,10 +133,38 @@ public:
 /*{{{ template --> */
     Template::pointer get_template(const std::string &template_name);
     Template::pointer get_template_list_head();
-    std::vector< std::string > get_template_names();
+    std::vector<std::string> get_template_names();
     std::vector<std::string> get_template_names(const Module &module);
     std::vector<std::string> get_template_names(Module::pointer module);
 /* <-- template }}}*/
+
+/*{{{ facts --> */
+    Fact::pointer get_facts();
+    Fact::pointer assert_fact(const std::string &factString);
+
+    DefaultFacts::pointer get_default_facts(const std::string &default_facts_name);
+    std::vector< std::string > get_default_facts_names();
+    std::vector<std::string> get_default_facts_names(const Module &module);
+    std::vector<std::string> get_default_facts_names(Module::pointer module);
+    DefaultFacts::pointer get_default_facts_list_head();
+/* <-- facts }}}*/
+
+/*{{{ class ---> */
+    Class::pointer get_class(const std::string &class_name);
+    Class::pointer get_class_list_head();
+    std::vector<std::string> get_class_names();
+    std::vector<std::string> get_class_names(const Module &module);
+    std::vector<std::string> get_class_names(Module::pointer module);
+/* <-- class }}}*/
+
+/*{{{ instance --> */
+    long save_instances(const std::string &filename, int saveCode = VISIBLE_SAVE);
+    long binary_save_instances(const std::string &filename, int saveCode = VISIBLE_SAVE);
+    long load_instances(const std::string &filename);
+    long binary_load_instances(const std::string &filename);
+    Instance::pointer new_instance(const std::string &makeString);
+    Instance::pointer get_instance_list_head();
+/* <-- instance }}}*/
 
 /*{{{ rule --> */
     Rule::pointer get_rule(const std::string &rule_name);
@@ -703,3 +727,15 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 } /* namespace CLIPS */
 
 #endif /* __Environment_H__ */
+
+// directGetSlot( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance, jstring slotName)
+// findInstanceByName( JNIEnv *env, jobject javaEnv, jlong clipsEnv, jstring instanceName)
+// getDefclassText( JNIEnv *env, jobject obj, jlong clipsEnv, jlong defclassLong)
+// getInstanceList( JNIEnv *env, jobject obj, jlong clipsEnv)
+// getInstanceName( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
+// getInstanceScopes( JNIEnv *env, jobject obj, jlong clipsEnv)
+// getInstancesChanged( JNIEnv *env, jobject obj, jlong clipsEnv)
+// makeInstance( JNIEnv *env, jobject obj, jlong clipsEnv, jstring instanceStr)
+// releaseInstance( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
+// retainInstance( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
+// setInstancesChanged( JNIEnv *env, jobject obj, jlong clipsEnv, jboolean value)
