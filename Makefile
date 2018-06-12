@@ -5,9 +5,14 @@
 # 其他变量
 OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
-DEFS     := -DDEBUG -DUSE_ROUTER_LOG -DDEBUG_MEMORY
+DEFS     := -DDEBUG -DDEBUG_MEMORY
+# DEFS     := -DDEBUG -DUSE_ROUTER_LOG -DDEBUG_MEMORY
 
 CLIPS_DIR:=/workspace/clips/learn/clips_core_source_630
+
+MISC_DIR := ../Utils/Misc
+MESSAGE_DIR := ../Utils/Message
+LOG_DIR := ../Utils/Log
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
@@ -16,9 +21,9 @@ CXX 	:= $(CROSS_COMPILE)g++
 CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
-CPPFLAGS:= -std=c++11
-LDFLAGS := -L$(CLIPS_DIR)/core -lpthread -lclips
-INCLUDE := -I$(CLIPS_DIR)/core
+CPPFLAGS:= -std=c++11 -lclips -lUtils_log -lUtils_message -lUtils_misc -lpthread 
+LDFLAGS := -L$(CLIPS_DIR)/core -L$(MISC_DIR)/output -L$(MESSAGE_DIR)/output -L$(LOG_DIR)/output
+INCLUDE := -I$(CLIPS_DIR)/core -I$(MISC_DIR)/src -I$(MESSAGE_DIR)/src -I$(LOG_DIR)/src
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
