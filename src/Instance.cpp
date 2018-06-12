@@ -39,13 +39,13 @@ Instance::~Instance()
         EnvDecrementInstanceCount(m_environment.cobj(), m_cobj);
 
     /* Ugly API */
-    if (!refcount()) {
-        if (TRUE == EnvUnmakeInstance(m_environment.cobj(), m_cobj)) {
-            printf("#################true##############\n");
-            m_cobj = 0;
-        } else 
-            printf("#################false#############\n");
-    }
+    const unsigned int count = refcount();
+    if (0 == count)
+        EnvUnmakeInstance(m_environment.cobj(), m_cobj);
+
+#ifdef DEBUG_MEMORY
+    printf("Instance[%p] cobj[%p] refcount[%d]\n", this, m_cobj, count);
+#endif
 }
 
 std::string Instance::name()
@@ -99,12 +99,5 @@ unsigned int Instance::refcount() const
     INSTANCE_TYPE *ins = (INSTANCE_TYPE*)m_cobj;
     return ins->header.busyCount;
 }
-
-#ifdef DEBUG_OBJECT
-void Instance::debug()
-{
-
-}
-#endif
 
 } /* namespace */

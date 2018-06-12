@@ -11,8 +11,6 @@
 
 #include <memory>
 
-/* #define DEBUG_MEMORY */
-
 #ifdef DEBUG_MEMORY
 #include <cstdio>
 #include <string>
@@ -29,15 +27,16 @@ public:
 #else
     ClipsObject(std::string id, void *obj = 0) : __debugID(id), m_cobj(obj)
     {
-        printf("-------> create(%p), name(%s)\n", this, __debugID.c_str());
+        printf("-------> create(%p), name(%s), cobj(%p)\n", this, __debugID.c_str(), m_cobj);
     }
 #endif
 
     ~ClipsObject()
     {
 #ifdef DEBUG_MEMORY
-        printf("-------> delete(%p), name(%s)\n", this, __debugID.c_str());
+        printf("-------> delete(%p), name(%s), cobj(%p)\n", this, __debugID.c_str(), m_cobj);
 #endif
+        m_cobj = 0;
     }
 
 #ifdef DEBUG_OBJECT

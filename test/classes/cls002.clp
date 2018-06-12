@@ -1,6 +1,6 @@
-(defclass MAIN::Student
+(defclass MAIN::Person
     (is-a USER)
-    (slot stuname
+    (slot nname
         (type STRING)
     )
     (slot gender
@@ -14,8 +14,8 @@
     )
 )
 
-(defclass MAIN::GoodStudent 
-    (is-a Student)
+(defclass MAIN::Student 
+    (is-a Person)
     (role concrete)
     (pattern-match reactive)
     (slot grade

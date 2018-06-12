@@ -183,11 +183,4 @@ unsigned int Fact::refcount() const
     return f->factHeader.busyCount;
 }
 
-#ifdef DEBUG_OBJECT
-void Instance::debug()
-{
-
-}
-#endif
-
 } /* namespace CLIPS */

@@ -5,7 +5,7 @@
 # 其他变量
 OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
-DEFS     := -DEBUG_OBJECT
+DEFS     := -DDEBUG -DUSE_ROUTER_LOG -DDEBUG_MEMORY
 
 CLIPS_DIR:=/workspace/clips/learn/clips_core_source_630
 

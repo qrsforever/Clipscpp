@@ -7,16 +7,22 @@
  ****************************************************************************/
 
 #include "Environment.h"
-#include "Log.h"
+#include "Router.h"
 
-extern "C"
+extern "C" {
 #include "clips.h"
+}
 
 #include <unistd.h>
 #include <sys/time.h>
 #include <iostream>
 #include <sstream>
 
+#ifndef USE_ROUTER_LOG
+#include "Log.h"
+#include "LogThread.h"
+static UTILS::LogThread * g_logThread = 0;
+#endif
 using namespace CLIPS;
 
 #define TEST_VERSION_MAJOR 0
@@ -99,6 +105,7 @@ public:
 };/*}}}*/
 
 Test gTest;
+Instance::pointer gIns;
 
 void setupClips(Environment *env)
 {/*{{{*/
@@ -355,9 +362,50 @@ void test_class(Environment *env)
 
 }/*}}}*/
 
+void test_instance(Environment *env)
+{/*{{{*/
+    Instance::pointer ins1 = env->new_instance(
+        "(stu1 of Student "
+        "    (nname \"stu-1\") "
+        "    (age 22) "
+        "    (gender female) "
+        "    (grade 75.0))"
+        );
+    LOGD("[%p] format:\n[%s]\n", ins1.get(), ins1->formatted().c_str());
+    Values v1 = ins1->send("print", "");
+    LOGD("v1 print[%p] size[%lu]:\n", ins1.get(), v1.size());
+    SHOW_VALUES(v1, "\t\t");
+
+    Instance::pointer ins2 = env->new_instance(
+        "(stu2 of Student "
+        "     (nname \"stu-2\"))"
+        );
+    LOGD("[%p] format:\n[%s]\n", ins2.get(), ins2->formatted().c_str());
+    ins2->send("put-nname", "stu3");
+    ins2->send("put-age", "30");
+    ins2->send("put-grade", "89.5");
+    ins2->send("print", "");
+
+    Values values = env->evaluate("(instances)");
+    LOGD("Show (instances):\n");
+    SHOW_VALUES(values, "\t");
+
+    LOGD("1shared_ptr[%p] count: %ld\n", ins2.get(), ins2.use_count());
+    gIns = ins2;
+    LOGD("2shared_ptr[%p] count: %ld\n", ins2.get(), ins2.use_count());
+
+
+}/*}}}*/
+
 int main(int argc, char *argv[])
 {/*{{{*/
     int ret = -1;
+
+#ifndef USE_ROUTER_LOG
+    g_logThread = new UTILS::LogThread();
+    g_logThread->start();
+    setLogLevel(LOG_LEVEL_INFO);
+#endif
 
     LOGD("\n\n********************Main start****************\n\n");
 
@@ -419,5 +467,12 @@ int main(int argc, char *argv[])
      */
     test_class(env);
 
+    /*
+     * 测试Instance
+     */
+    test_instance(env);
+    LOGD("3shared_ptr[%p] count: %ld\n", gIns.get(), gIns.use_count());
+
+    LOGD("\n\n Test End\n\n");
     return 0;
 }/*}}}*/

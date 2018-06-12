@@ -1,32 +1,34 @@
 /***************************************************************************
- *  Log.cpp - Log impl for clipsc++
+ *  Router.cpp - Router impl for clipsc++
  *
  *  Created: 2018-06-06 19:05:10
  *
  *  Copyright QRS
  ****************************************************************************/
 
-#include "Log.h"
-
-#include <stdlib.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
-
-#include <string>
+#include "Router.h"
 
 extern "C" {
 #include "clips.h"
 }
+
+#include <string>
 
 #define LOG_INFO_NAME   "info"
 #define LOG_DEBUG_NAME  "debug"
 #define LOG_WARN_NAME   "warn"
 #define LOG_ERROR_NAME  "error"
 
-int g_logLevel = LOG_LEVEL_TRACE;
+#ifndef USE_ROUTER_LOG
+#include "Log.h"
+#else
 
-static std::string g_buffer;
+#include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
+int g_logLevel = LOG_LEVEL_TRACE;
 
 static const char* textLevel[] = {"Assert", "Error!", "Warning", "Debug", "Info", "Trace"};
 
@@ -51,9 +53,13 @@ void setLogLevel(int level)
 {
     g_logLevel = level;
 }
+#endif /* USE_ROUTER_LOG */
+
+static std::string g_buffer;
 
 static int s_log_router_query(void *env, const char *logicalName)
 {
+    (void)env;
     if (strcmp(logicalName, LOG_INFO_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_DEBUG_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_WARN_NAME) == 0) return TRUE;
@@ -68,6 +74,7 @@ static int s_log_router_query(void *env, const char *logicalName)
 
 static int s_log_router_print(void *env, const char *logicalName, const char *str)
 {
+    (void)env;
     if (strcmp(str, "\n") != 0) {
         g_buffer += str;
         return TRUE;
@@ -94,6 +101,8 @@ static int s_log_router_print(void *env, const char *logicalName, const char *st
 
 static int s_log_router_exit(void *env, int exitCode)
 {
+    (void)env;
+    (void)exitCode;
     return TRUE;
 }
 

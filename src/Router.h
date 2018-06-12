@@ -1,18 +1,20 @@
 /***************************************************************************
- *  Log.h - Log header for clipsc++
+ *  Router.h - Router header for clipsc++
  *
  *  Created: 2018-06-06 19:04:43
  *
  *  Copyright QRS
  ****************************************************************************/
 
-#ifndef __Log_H__
-#define __Log_H__
+#ifndef __Router_H__
+#define __Router_H__
+
+#ifdef USE_ROUTER_LOG
 
 #include <stdio.h>
 #include <stdint.h>
 
-enum LogLevel {
+enum RouterLevel {
     LOG_LEVEL_ERROR   = 0x01,
     LOG_LEVEL_WARNING = 0x02,
     LOG_LEVEL_DEBUG  = 0x03,
@@ -20,14 +22,14 @@ enum LogLevel {
     LOG_LEVEL_TRACE = 0x05
 };
 
-#ifdef NDEBUG
+#ifdef NDEBUGX
 
 #define LOGE(args...) ((void)0)
 #define LOGW(args...) ((void)0)
 #define LOGD(args...) ((void)0)
 #define LOGI(args...) ((void)0)
 
-#else /* NDEBUG */
+#else /* NDEBUGX */
 
 extern int g_logLevel;
 #define LOGE(args...) \
@@ -60,19 +62,27 @@ do { \
         logVerbose(__FILE__, __LINE__, __FUNCTION__, LOG_LEVEL_TRACE, args); \
 } while(0)
 
-#endif /* NDEBUG */
+#endif /* NDEBUGX */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
 void logVerbose(const char *file, int line, const char *function, int level, const char *fmt, ...);
 void setLogLevel(int level);
-int init_clips_logger(void *env);
-int finalize_clips_logger(void *env);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __Log_H__ */
+#else
+
+#include "Log.h"
+
+#endif /* USE_ROUTER_LOG */
+
+int init_clips_logger(void *env);
+int finalize_clips_logger(void *env);
+
+#endif /* __Router_H__ */
