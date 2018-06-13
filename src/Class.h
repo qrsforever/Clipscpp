@@ -60,7 +60,7 @@ public:
     bool is_deletable();
 
     bool undefine();
-    
+
 protected:
     Environment& m_environment;
 

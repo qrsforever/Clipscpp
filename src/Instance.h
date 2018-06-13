@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 #ifndef __Instance_H__
-#define __Instance_H__ 
+#define __Instance_H__
 
 #include "ClipsObject.h"
 #include "Value.h"

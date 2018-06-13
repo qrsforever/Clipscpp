@@ -31,7 +31,7 @@
 extern "C"
 int EnvDefineFunction2WithContext(void *, const char *, int, int (*) (void *), const char *, const char *, void *);
 
-#define GLOBAL_SAVE   0  
+#define GLOBAL_SAVE   0
 #define LOCAL_SAVE    1
 #define VISIBLE_SAVE  2
 
@@ -76,7 +76,7 @@ public:
     bool save(const std::string &filename);
     bool binary_load(const std::string &filename);
     bool binary_save(const std::string &filename);
-    
+
     bool build(const std::string &construct);
     bool batch_evaluate(const std::string &filename);
     void reset();

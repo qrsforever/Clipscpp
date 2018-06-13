@@ -97,9 +97,9 @@ std::vector<std::string> Class::slot_names(bool inheritFlag)
 {
     DATA_OBJECT clipsdo;
     if (m_cobj) {
-        EnvClassSlots(m_environment.cobj(), 
+        EnvClassSlots(m_environment.cobj(),
             m_cobj,
-            &clipsdo, 
+            &clipsdo,
             inheritFlag ? 1 : 0);
         return data_object_to_strings(&clipsdo);
     }
