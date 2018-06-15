@@ -5,14 +5,26 @@
 # 其他变量
 OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
-DEFS     := -DDEBUG -DDEBUG_MEMORY
+DEFS     := -DDEBUG
 # DEFS     := -DDEBUG -DUSE_ROUTER_LOG -DDEBUG_MEMORY
 
-CLIPS_DIR:=/workspace/clips/learn/clips_core_source_630
+PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
+IS_HOMEBRAIN := $(shell git config --get remote.origin.url | grep -o smarthome)
 
-MISC_DIR := ../Utils/Misc
-MESSAGE_DIR := ../Utils/Message
-LOG_DIR := ../Utils/Log
+ifeq ($(IS_HOMEBRAIN), smarthome)
+	UTILS_DIR := ../../utils
+	CLIPS_DIR := $(PROJECT_ROOT_DIR)/homebrain/external/clips/core
+	CLIPS_LIB := $(PROJECT_ROOT_DIR)/out/linux/x86_64/release
+else
+	UTILS_DIR := ../Utils
+	CLIPS_DIR := /workspace/clips/learn/clips_core_source_630/core
+	CLIPS_LIB := $(CLIPS_DIR)
+endif
+
+CLIPSCPP_DIR:= ../Clipscpp
+MISC_DIR := $(UTILS_DIR)/Misc
+MESSAGE_DIR := $(UTILS_DIR)/Message
+LOG_DIR := $(UTILS_DIR)/Log
 
 # 初始化编译工具以及编译选项
 CROSS_COMPILE =
@@ -21,9 +33,9 @@ CXX 	:= $(CROSS_COMPILE)g++
 CC		:=
 AR		:= $(CROSS_COMPILE)ar
 CFLAGS  := $(OPTIMIZE) $(WARNINGS) $(DEFS)
-CPPFLAGS:= -std=c++11 -lclips -lUtils_log -lUtils_message -lUtils_misc -lpthread 
-LDFLAGS := -L$(CLIPS_DIR)/core -L$(MISC_DIR)/output -L$(MESSAGE_DIR)/output -L$(LOG_DIR)/output
-INCLUDE := -I$(CLIPS_DIR)/core -I$(MISC_DIR)/src -I$(MESSAGE_DIR)/src -I$(LOG_DIR)/src
+CPPFLAGS:= -std=c++11 -lclips -lUtils_log -lUtils_message -lUtils_misc -lpthread
+LDFLAGS := -L$(CLIPS_LIB) -L$(MISC_DIR)/output -L$(MESSAGE_DIR)/output -L$(LOG_DIR)/output
+INCLUDE := -I$(CLIPS_DIR) -I$(MISC_DIR)/src -I$(MESSAGE_DIR)/src -I$(LOG_DIR)/src
 
 # 源文件可能的后缀
 SRCEXTS := c C cc cpp CPP c++ cxx cp
@@ -34,6 +46,9 @@ SRC_DIR = . src
 INC_DIR = . src
 OUT_DIR = output
 OBJ_DIR = $(OUT_DIR)/obj
+
+# 指定运行环境
+RPATH = ":$(OUT_DIR):$(CLIPS_DIR)"
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
@@ -119,7 +134,7 @@ run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
 test:$(TARGET_NAME)
-	$(CXX) $(INCLUDE) $(OBJECTS) src/UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS}
-	export LD_LIBRARY_PATH=$(CLIPS_DIR)/core && $(OUT_DIR)/$@
+	$(CXX) $(INCLUDE) $(OBJECTS) src/UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS} -Wl,-rpath=$(RPATH) 
+	$(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

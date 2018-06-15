@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#define DEBUG_MEMORY
+
 #ifdef DEBUG_MEMORY
 #include <cstdio>
 #include <string>
