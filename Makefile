@@ -6,7 +6,6 @@
 OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
-# DEFS     := -DDEBUG -DUSE_ROUTER_LOG -DDEBUG_MEMORY
 
 PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
 IS_HOMEBRAIN := $(shell git config --get remote.origin.url | grep -o smarthome)
@@ -52,7 +51,7 @@ RPATH = ":$(OUT_DIR):$(CLIPS_DIR)"
 
 # 额外增加的源文件或者排除不编译的源文件
 SPECIAL_SRC :=
-EXCLUDE_SRC := src/UnitTest.cpp
+EXCLUDE_SRC := %UnitTest.cpp
 
 # 设置目标类型(exe, a, so), 及目标名字
 TARGET_TYPE := a
@@ -134,7 +133,7 @@ run:$(TARGET_NAME)
 	@$(TARGET_NAME)
 
 test:$(TARGET_NAME)
-	$(CXX) $(INCLUDE) $(OBJECTS) src/UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS} -Wl,-rpath=$(RPATH) 
+	$(CXX) $(INCLUDE) $(OBJECTS) UnitTest.cpp -o $(OUT_DIR)/$@ $(LDFLAGS) $(CPPFLAGS) ${CFLAGS} -Wl,-rpath=$(RPATH)
 	$(OUT_DIR)/$@
 
 .PHONY: $(PHONY)

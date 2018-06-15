@@ -10,11 +10,11 @@ categories: [ Local ]
 下载依赖
 ========
 
-官网下载: 
+官网下载:
     [630](https://sourceforge.net/projects/clipsrules/files/CLIPS/6.30/)
     [640](https://netix.dl.sourceforge.net/project/clipsrules/CLIPS/6.40_Beta_2/clips_core_source_640.zip)
 
-百度云盘: 
+百度云盘:
     [630](https://pan.baidu.com/s/1hzLVwX_clG50FjaJ0t7hdg)
     [640](https://pan.baidu.com/s/1calD7UUv94IVyq4mcuXPLA)
 
@@ -54,7 +54,9 @@ HomeBrain工程编译调试
 
 1. `cd $TOP_DIR`
 
-2. `make linux DIR=homebrain/src/rule-engine`
+2. `make linxu DIR=homebrain/external/clips`
+
+3. `make linux DIR=homebrain/src/rule-engine`
 
 TODO
 ====

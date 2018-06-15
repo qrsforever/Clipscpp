@@ -9,6 +9,8 @@
 #ifndef __Router_H__
 #define __Router_H__
 
+/* #define USE_ROUTER_LOG */
+
 #ifdef USE_ROUTER_LOG
 
 #include <stdio.h>

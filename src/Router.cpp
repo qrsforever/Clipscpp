@@ -18,10 +18,9 @@ extern "C" {
 #define LOG_DEBUG_NAME  "debug"
 #define LOG_WARN_NAME   "warn"
 #define LOG_ERROR_NAME  "error"
+#define LOG_TRACE_NAME  "trace"
 
-#ifndef USE_ROUTER_LOG
-#include "Log.h"
-#else
+#ifdef USE_ROUTER_LOG
 
 #include <stdlib.h>
 #include <stdarg.h>
@@ -64,6 +63,7 @@ static int s_log_router_query(void *env, const char *logicalName)
     if (strcmp(logicalName, LOG_DEBUG_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_WARN_NAME) == 0) return TRUE;
     if (strcmp(logicalName, LOG_ERROR_NAME) == 0) return TRUE;
+    if (strcmp(logicalName, LOG_TRACE_NAME) == 0) return TRUE;
     if (strcmp(logicalName, WTRACE) == 0) return TRUE;
     if (strcmp(logicalName, STDOUT) == 0) return TRUE;
     if (strcmp(logicalName, WWARNING) == 0) return TRUE;
@@ -92,7 +92,8 @@ static int s_log_router_print(void *env, const char *logicalName, const char *st
     } else if (strcmp(logicalName, LOG_ERROR_NAME) == 0
         || strcmp(logicalName, WERROR) == 0) {
         LOGE("Clips: %s", g_buffer.c_str());
-    } else if (strcmp(logicalName, WTRACE) == 0) {
+    } else if (strcmp(logicalName, WTRACE) == 0
+        || strcmp(logicalName, LOG_TRACE_NAME) == 0) {
         LOGT("Clips: %s", g_buffer.c_str());
     }
     g_buffer.clear();
