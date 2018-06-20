@@ -319,6 +319,13 @@ void test_rule(Environment *env)
                 rule->firings_watched());
         }
     }
+    /* std::string eval("(rules)"); */
+    std::string eval("(list-defrules)");
+    LOGD("before retract\n");
+    env->evaluate(eval);
+    rule->retract();
+    LOGD("after retract\n");
+    env->evaluate(eval);
 }/*}}}*/
 
 void test_class(Environment *env)

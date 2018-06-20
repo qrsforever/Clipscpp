@@ -727,15 +727,3 @@ inline bool Environment::add_function(std::string name, std::shared_ptr<Functor<
 } /* namespace CLIPS */
 
 #endif /* __Environment_H__ */
-
-// directGetSlot( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance, jstring slotName)
-// findInstanceByName( JNIEnv *env, jobject javaEnv, jlong clipsEnv, jstring instanceName)
-// getDefclassText( JNIEnv *env, jobject obj, jlong clipsEnv, jlong defclassLong)
-// getInstanceList( JNIEnv *env, jobject obj, jlong clipsEnv)
-// getInstanceName( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
-// getInstanceScopes( JNIEnv *env, jobject obj, jlong clipsEnv)
-// getInstancesChanged( JNIEnv *env, jobject obj, jlong clipsEnv)
-// makeInstance( JNIEnv *env, jobject obj, jlong clipsEnv, jstring instanceStr)
-// releaseInstance( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
-// retainInstance( JNIEnv *env, jclass javaClass, jobject javaEnv, jlong clipsEnv, jlong clipsInstance)
-// setInstancesChanged( JNIEnv *env, jobject obj, jlong clipsEnv, jboolean value)
