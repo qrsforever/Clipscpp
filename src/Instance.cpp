@@ -77,6 +77,21 @@ Instance::pointer Instance::next()
     return Instance::pointer();
 }
 
+Values Instance::send(const std::string &msg)
+{
+    if (!m_cobj)
+        return Values();
+
+    DATA_OBJECT indata;
+    DATA_OBJECT outdata;
+
+    SetType(indata, INSTANCE_ADDRESS);
+    SetValue(indata, m_cobj);
+
+    EnvSend(m_environment.cobj(), &indata, msg.c_str(), 0, &outdata);
+    return data_object_to_values(&outdata);
+}
+
 Values Instance::send(const std::string &msg, const std::string &args)
 {
     if (!m_cobj)

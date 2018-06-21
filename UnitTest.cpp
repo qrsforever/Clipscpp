@@ -371,7 +371,7 @@ void test_class(Environment *env)
 
 void test_instance(Environment *env)
 {/*{{{*/
-    Instance::pointer ins1 = env->new_instance(
+    Instance::pointer ins1 = env->make_instance(
         "(stu1 of Student "
         "    (nname \"stu-1\") "
         "    (age 22) "
@@ -383,7 +383,7 @@ void test_instance(Environment *env)
     LOGD("v1 print[%p] size[%lu]:\n", ins1.get(), v1.size());
     SHOW_VALUES(v1, "\t\t");
 
-    Instance::pointer ins2 = env->new_instance(
+    Instance::pointer ins2 = env->make_instance(
         "(stu2 of Student "
         "     (nname \"stu-2\"))"
         );

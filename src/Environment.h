@@ -162,7 +162,7 @@ public:
     long binary_save_instances(const std::string &filename, int saveCode = VISIBLE_SAVE);
     long load_instances(const std::string &filename);
     long binary_load_instances(const std::string &filename);
-    Instance::pointer new_instance(const std::string &makeString);
+    Instance::pointer make_instance(const std::string &makeString);
     Instance::pointer get_instance_list_head();
 /* <-- instance }}}*/
 

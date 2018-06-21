@@ -32,6 +32,8 @@ public:
 
     Instance::pointer next();
 
+    Values send(const std::string &msg);
+
     Values send(const std::string &msg, const std::string &args);
 
     ~Instance();

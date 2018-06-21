@@ -544,7 +544,7 @@ long Environment::binary_load_instances(const std::string &filename)
     return EnvBinaryLoadInstances(m_cobj, filename.c_str());
 }
 
-Instance::pointer Environment::new_instance(const std::string &makeString)
+Instance::pointer Environment::make_instance(const std::string &makeString)
 {
     void *instance = EnvMakeInstance(m_cobj, makeString.c_str());
     if (instance)
