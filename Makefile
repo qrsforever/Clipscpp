@@ -7,7 +7,7 @@ OPTIMIZE :=
 WARNINGS := -Wall -Wno-unused -Wno-format
 DEFS     := -DDEBUG
 
-PROJECT_ROOT_DIR := $(shell git worktree list | cut -d \  -f1)
+PROJECT_ROOT_DIR := $(shell dirname `git rev-parse --git-dir`)
 IS_HOMEBRAIN := $(shell git config --get remote.origin.url | grep -o smarthome)
 
 ifeq ($(IS_HOMEBRAIN), smarthome)
@@ -89,7 +89,7 @@ endif
 # 定义伪目标
 PHONY = all .mkdir clean
 
-all: .mkdir $(TARGET_NAME) test
+all: .mkdir $(TARGET_NAME)
 
 # 函数: 添加%.x依赖文件的路径
 define add_vpath
