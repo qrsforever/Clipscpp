@@ -75,11 +75,12 @@ static int s_log_router_query(void *env, const char *logicalName)
 static int s_log_router_print(void *env, const char *logicalName, const char *str)
 {
     (void)env;
-    if (strcmp(str, "\n") != 0) {
+    if (strrchr(str, '\n') == 0) {
         g_buffer += str;
         return TRUE;
     }
-    g_buffer += "\n";
+    g_buffer += str;
+
     if (strcmp(logicalName, LOG_INFO_NAME) == 0
         || strcmp(logicalName, WDISPLAY) == 0) {
         LOGI("Clips: %s", g_buffer.c_str());

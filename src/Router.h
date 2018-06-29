@@ -64,6 +64,8 @@ do { \
         logVerbose(__FILE__, __LINE__, __FUNCTION__, LOG_LEVEL_TRACE, args); \
 } while(0)
 
+#define LOGTT() LOGT("run here!\n");
+
 #endif /* NDEBUGX */
 
 #ifdef __cplusplus

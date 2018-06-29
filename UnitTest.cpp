@@ -367,6 +367,18 @@ void test_class(Environment *env)
             LOGD("names[%d] = %s\n", j, names[j].c_str());
     }
 
+#if 0 /* test ok */
+    cls = env->get_class("Student");
+    if (cls) {
+        LOGD("undefine class: %d\n", cls->undefine());
+        cls = env->get_class("Student");
+        if (cls)
+            LOGD("undefine fail!\n");
+        else
+            LOGD("undefine success!\n");
+    }
+#endif
+
 }/*}}}*/
 
 void test_instance(Environment *env)
