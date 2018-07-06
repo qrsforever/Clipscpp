@@ -254,6 +254,15 @@ void test_global(Environment *env)
                 SHOW_VALUE(values[j], "\t");
         }
     }
+    global = env->get_global("MAIN::VERSION-MAJOR");
+    if (global) {
+        Value v(9999);
+        global->set_value(v);
+        Values values = global->value();
+        for (unsigned int j = 0; j < values[j].size(); ++j)
+            SHOW_VALUE(values[j], "\t");
+    }
+
 }/*}}}*/
 
 void test_function(Environment *env)
