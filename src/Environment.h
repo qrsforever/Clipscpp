@@ -53,23 +53,28 @@ private:
     std::function<R(Args...) > _fun;
 }; /* class Functor */
 
+class EnvironmentCallback {
+public:
+    virtual ~EnvironmentCallback() {}
+    virtual void onCallClear() = 0;
+    virtual void onCallReset() = 0;
+    virtual void onPeriodic() = 0;
+    virtual void onRuleFiring() = 0;
+}; /* class EnvironmentCallback */
+
 class Environment : public ClipsObject {
 public:
     Environment();
     ~Environment();
 
-    typedef std::function<void(void)> VoidCallback;
     typedef int (*UserFunc_t)(void*);
 
     static void s_clear_callback(void *env);
-    static void s_periodic_callback(void *env);
     static void s_reset_callback(void *env);
+    static void s_periodic_callback(void *env);
     static void s_rulefiring_callback(void *env);
 
-    void regist_clear_callback(VoidCallback cb) { m_clear_cb = cb; }
-    void regist_periodic_callback(VoidCallback cb) { m_periodic_cb = cb; }
-    void regist_reset_callback(VoidCallback cb) { m_reset_callback = cb; }
-    void regist_rulefiring_callback(VoidCallback cb) { m_rulefiring_cb = cb; }
+    void setCallback(EnvironmentCallback *cb) { mCallback = cb; }
 
 /*{{{ general --> */
     int load(const std::string &filename);
@@ -326,11 +331,7 @@ protected:
 
 private:
     static std::map<void*, Environment*> m_environment_map;
-
-    VoidCallback m_clear_cb;
-    VoidCallback m_periodic_cb;
-    VoidCallback m_reset_callback;
-    VoidCallback m_rulefiring_cb;
+    EnvironmentCallback *mCallback;
 
 }; /* class Environment */
 

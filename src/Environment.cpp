@@ -21,45 +21,40 @@ void Environment::s_clear_callback(void *env)
 {
     /* LOGI("Call s_ClearCallBack(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
-    if (context->m_clear_cb) {
-        context->m_clear_cb();
-    }
-}
-
-void Environment::s_periodic_callback(void *env)
-{
-    /* LOGI("Call s_periodic_callback(%p) this[%p]\n", env, m_environment_map[env]); */
-    Environment *context = m_environment_map[env];
-    if (context->m_periodic_cb) {
-        context->m_periodic_cb();
-    }
+    if (context && context->mCallback)
+        context->mCallback->onCallClear();
 }
 
 void Environment::s_reset_callback(void *env)
 {
     /* LOGI("Call s_reset_callback(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
-    if (context->m_reset_callback) {
-        context->m_reset_callback();
-    }
+    if (context && context->mCallback)
+        context->mCallback->onCallReset();
+}
+
+void Environment::s_periodic_callback(void *env)
+{
+    /* LOGI("Call s_periodic_callback(%p) this[%p]\n", env, m_environment_map[env]); */
+    Environment *context = m_environment_map[env];
+    if (context && context->mCallback)
+        context->mCallback->onPeriodic();
 }
 
 void Environment::s_rulefiring_callback(void *env)
 {
     /* LOGI("Call s_rulefiring_callback(%p) this[%p]\n", env, m_environment_map[env]); */
     Environment *context = m_environment_map[env];
-    if (context->m_rulefiring_cb) {
-        context->m_rulefiring_cb();
-    }
+    if (context && context->mCallback)
+        context->mCallback->onRuleFiring();
 }
 
 Environment::Environment()
 #ifndef DEBUG_MEMORY
-    : ClipsObject(0)
+    : ClipsObject(0), mCallback(0)
 #else
-    : ClipsObject("Environment", 0)
+    : ClipsObject("Environment", 0), mCallback(0)
 #endif
-    , m_clear_cb(0), m_periodic_cb(0), m_reset_callback(0), m_rulefiring_cb(0)
 {
     LOGD("Environment construct.\n");
 

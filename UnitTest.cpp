@@ -52,9 +52,9 @@ using namespace CLIPS;
             SHOW_VALUE(items[i], tok); \
     } while(0)
 
-class Test {/*{{{*/
+class Test : public EnvironmentCallback {/*{{{*/
 public:
-    void onClear(void)
+    void onCallClear(void)
     {
         /* LOGD("onClear this[%p]\n", this); */
     }
@@ -62,7 +62,7 @@ public:
     {
         /* LOGD("onPeriodic this[%p]\n", this); */
     }
-    void onReset(void)
+    void onCallReset(void)
     {
         /* LOGD("onReset this[%p]\n", this); */
     }
@@ -442,10 +442,8 @@ int main(int argc, char *argv[])
     /*
      * Regist clear,reset,periodic,run callback
      */
-    env->regist_clear_callback(std::bind(&Test::onClear, &gTest));
-    env->regist_periodic_callback(std::bind(&Test::onPeriodic, &gTest));
-    env->regist_reset_callback(std::bind(&Test::onReset, &gTest));
-    env->regist_rulefiring_callback(std::bind(&Test::onRuleFiring, &gTest));
+
+    env->setCallback(&gTest);
 
     setupClips(env);
     startClips(env);
