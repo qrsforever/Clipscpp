@@ -11,6 +11,7 @@
 
 #include "ClipsObject.h"
 #include "Value.h"
+#include "Class.h"
 
 #include <string.h>
 
@@ -29,6 +30,8 @@ public:
     std::string name();
 
     std::string formatted();
+
+    Class::pointer getClass();
 
     Instance::pointer next();
 

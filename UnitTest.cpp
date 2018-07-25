@@ -250,8 +250,7 @@ void test_global(Environment *env)
         if (global) {
             LOGD("global name: %s, is_watched: %d\n", names[i].c_str(), global->is_watched());
             Values values = global->value();
-            for (unsigned int j = 0; j < values[j].size(); ++j)
-                SHOW_VALUE(values[j], "\t");
+            SHOW_VALUES(values)
         }
     }
     global = env->get_global("MAIN::VERSION-MAJOR");
@@ -259,8 +258,7 @@ void test_global(Environment *env)
         Value v(9999);
         global->set_value(v);
         Values values = global->value();
-        for (unsigned int j = 0; j < values[j].size(); ++j)
-            SHOW_VALUE(values[j], "\t");
+        SHOW_VALUES(values)
     }
 
 }/*}}}*/
@@ -425,6 +423,19 @@ void test_instance(Environment *env)
 
 }/*}}}*/
 
+void test_other(Environment *env)
+{
+    Class::pointer cls = env->get_class_list_head();
+    for (; cls != 0; cls = cls->next()) {
+        if (!cls->slot_exists("UUID", true))
+            continue;
+        std::vector<std::string> names = cls->slot_names(false);
+        for (uint32_t i = 0; i < names.size(); ++i) {
+
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {/*{{{*/
     int ret = -1;
@@ -497,7 +508,12 @@ int main(int argc, char *argv[])
      * 测试Instance
      */
     test_instance(env);
-    LOGD("3shared_ptr[%p] count: %ld\n", gIns.get(), gIns.use_count());
+    LOGD("shared_ptr[%p] count: %ld\n", gIns.get(), gIns.use_count());
+
+    /*
+     * 测试other
+     */
+    test_other(env);
 
     LOGD("\n\n Test End\n\n");
     return 0;

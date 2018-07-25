@@ -66,6 +66,13 @@ std::string Instance::formatted()
     return std::string();
 }
 
+Class::pointer Instance::getClass()
+{
+    if (m_cobj)
+        return Class::create(m_environment, EnvGetInstanceClass(m_environment.cobj(), m_cobj));
+    return Class::pointer();
+}
+
 Instance::pointer Instance::next()
 {
     void *nxt;
